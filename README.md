@@ -11,6 +11,15 @@ Existing solutions often fail to be **personalized, affordable, and culturally i
 
 ---
 
+## 📸 Screenshots
+
+![App Screenshot 1](assets/app_Scrrenshot/app1.png)  
+![App Screenshot 2](assets/app_Scrrenshot/app2.png)  
+![App Screenshot 3](assets/app_Scrrenshot/app3.png)
+
+
+---
+
 ## 🎯 Project Goal
 The goal of Dr. Savi is to make mental health care:
 - **Accessible** – available anytime, anywhere
