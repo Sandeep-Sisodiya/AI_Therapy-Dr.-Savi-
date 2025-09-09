@@ -1,0 +1,70 @@
+name: ai_therapy
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI and state management
+  get: ^4.6.6
+  google_fonts: ^6.2.1
+
+  # Lottie animations
+  lottie: ^2.7.0
+
+
+  # Speech and TTS
+  speech_to_text: ^7.1.0
+  flutter_tts: ^4.0.4
+
+  # Vibration
+  vibration: ^3.1.3
+  #  flutter_vibrate: ^2.0.1
+
+  # HTTP & environment variables
+  http: ^1.2.3
+  flutter_dotenv: ^5.2.0
+
+  # Local storage
+  get_storage: ^2.1.1
+
+  # Animations
+  flutter_animate: ^4.5.0
+
+  # Cupertino icons
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  google_fonts: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - .env
+    - assets/listening.json
+    - assets/speaking.json
+    - assets/fonts/
+    - assets/robot.png
+    - assets/ai_therapy.png
+    - assets/ai2.png
+    - assets/ai3.png
+    - assets/ai5.png
+    - assets/lottie/ai1.json
+    - assets/voice_chat.png
+
+  fonts:
+    - family: Nexa
+      fonts:
+        - asset: assets/fonts/Nexa_Bold.otf
+        - asset: assets/fonts/Nexa_Light.otf
+        - asset: assets/fonts/Nexa_Regular.otf
