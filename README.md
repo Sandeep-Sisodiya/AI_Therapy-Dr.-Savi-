@@ -11,6 +11,14 @@ Existing solutions often fail to be **personalized, affordable, and culturally i
 
 ---
 
+## 🎥 App Demo Video(MUST WATCH)
+
+Watch **Dr. Savi** in action here:
+
+👉 [View Demo Video on Google Drive](https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing)
+
+---
+
 ## 📸 Screenshots
 
 ![App Screenshot 1](assets/app_Scrrenshot/app1.png)  
