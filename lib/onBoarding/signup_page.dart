@@ -1,0 +1,214 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../Widgets/custom_button.dart';
+import '../custom_background.dart';
+import 'login_page.dart';
+
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
+
+  bool _isValidEmail(String email) {
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
+  }
+
+  bool _isValidPassword(String password) {
+    final regex = RegExp(r'^(?=.*[!@#\$&*~]).{6,}$'); // at least 6 + symbol
+    return regex.hasMatch(password);
+  }
+
+  void _showPopup(BuildContext context, String message, {bool success = false}) {
+    Get.dialog(
+      Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          decoration: BoxDecoration(
+            color: success ? Colors.green.withOpacity(0.85) : Colors.red.withOpacity(0.85),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      barrierColor: Colors.black.withOpacity(0.3), // transparent background
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (Get.isDialogOpen ?? false) Get.back();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fullNameController = TextEditingController();
+    final nicknameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
+    return Scaffold(
+      body: CustomBackground(
+        otherWidget: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.asset("assets/ai3.png", height: 150),
+                  const SizedBox(height: 20),
+
+                  Text(
+                    "Create Account ✨",
+                    style: GoogleFonts.poppins(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      shadows: [
+                        const Shadow(
+                          blurRadius: 4,
+                          color: Colors.brown,
+                          offset: Offset(1, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.brown.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: fullNameController,
+                          decoration: const InputDecoration(
+                            hintText: "Full Name",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.badge, color: Colors.black),
+                          ),
+                        ),
+                        const Divider(color: Colors.black54),
+                        TextField(
+                          controller: nicknameController,
+                          decoration: const InputDecoration(
+                            hintText: "Nickname",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.person, color: Colors.black),
+                          ),
+                        ),
+                        const Divider(color: Colors.black54),
+                        TextField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            hintText: "Email",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.email, color: Colors.black),
+                          ),
+                        ),
+                        const Divider(color: Colors.black54),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            hintText: "Password",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.lock, color: Colors.black),
+                          ),
+                        ),
+                        const Divider(color: Colors.black54),
+                        TextField(
+                          controller: confirmPasswordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            hintText: "Confirm Password",
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.lock_outline, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  CustomButton(
+                    text: "Sign Up",
+                    onPressed: () {
+                      final fullName = fullNameController.text.trim();
+                      final nickname = nicknameController.text.trim();
+                      final email = emailController.text.trim();
+                      final password = passwordController.text.trim();
+                      final confirmPassword = confirmPasswordController.text.trim();
+
+                      if (fullName.isEmpty || nickname.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+                        _showPopup(context, "All fields are required!");
+                        return;
+                      }
+                      if (!_isValidEmail(email)) {
+                        _showPopup(context, "Please enter a valid email!");
+                        return;
+                      }
+                      if (!_isValidPassword(password)) {
+                        _showPopup(context, "Password must be 6+ characters & include a symbol!");
+                        return;
+                      }
+                      if (password != confirmPassword) {
+                        _showPopup(context, "Passwords do not match!");
+                        return;
+                      }
+
+                      // Success
+                      _showPopup(context, "Account created successfully!", success: true);
+
+                      Future.delayed(const Duration(seconds: 2), () {
+                        Get.off(() => const LoginPage(),
+                            transition: Transition.leftToRightWithFade,
+                            duration: const Duration(milliseconds: 600));
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  GestureDetector(
+                    onTap: () => Get.to(() => const LoginPage(),
+                        transition: Transition.rightToLeftWithFade),
+                    child: Text(
+                      "Already have an account? Login",
+                      style: GoogleFonts.kaushanScript(
+                        fontSize: 16,
+                        color: Colors.black87,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:ai_therapy/onBoarding/login_page.dart';
 import 'package:ai_therapy/onBoarding/on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -126,10 +127,11 @@ class _MyAppState extends State<MyApp> {
       ),
       // ✅ Set initial screen here
       // home: const ModeSelectionScreen(),
-      home: OnBoarding(),
+      // home: OnBoarding(),
       // home : firstTime ? const ModeSelectionScreen() : const HomeView(),
       // home: ChatModeScreen(),
       // home: ModeSelectionScreen(),
+      home: LoginPage(),
     );
   }
 }
