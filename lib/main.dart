@@ -157,7 +157,7 @@ class _RectSliderThumbShape extends SliderComponentShape {
         required RenderBox parentBox,
         required SliderThemeData sliderTheme,
         required TextDirection textDirection,
-        required double value,git
+        required double value,
         required double textScaleFactor,
         required Size sizeWithOverflow,
       }) {
