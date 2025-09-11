@@ -167,6 +167,7 @@ class _RectSliderThumbShape extends SliderComponentShape {
       center: center,
       width: width,
       height: 45,
+    //   abc
     );
     context.canvas.drawRRect(
       RRect.fromRectAndRadius(rect, Radius.circular(width / 2)),
