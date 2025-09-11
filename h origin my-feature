@@ -1,0 +1,35 @@
+[33md047217[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: commit: adding
+[33mba8ecac[m HEAD@{1}: commit: adding
+[33m3b5883b[m HEAD@{2}: commit: Add GeneratedPluginRegistrant.java
+[33m0e0f739[m HEAD@{3}: checkout: moving from main to main
+[33m0e0f739[m HEAD@{4}: commit: Apply new gitignore
+[33m67bc39f[m HEAD@{5}: checkout: moving from main to main
+[33m67bc39f[m HEAD@{6}: checkout: moving from my-feature to main
+[33mdf1adb6[m HEAD@{7}: commit: added test change
+[33m67bc39f[m HEAD@{8}: checkout: moving from new-feature to my-feature
+[33m67bc39f[m HEAD@{9}: checkout: moving from main to new-feature
+[33m67bc39f[m HEAD@{10}: pull origin main: Fast-forward
+[33mb32ac24[m HEAD@{11}: checkout: moving from feature-branch-name to main
+[33mae4c7ec[m[33m ([m[1;31morigin/feature-branch-name[m[33m, [m[1;32mfeature-branch-name[m[33m)[m HEAD@{12}: commit: adding
+[33mcf7df9f[m HEAD@{13}: commit: adding
+[33mb32ac24[m HEAD@{14}: checkout: moving from main to feature-branch-name
+[33mb32ac24[m HEAD@{15}: checkout: moving from main to main
+[33mb32ac24[m HEAD@{16}: checkout: moving from main to main
+[33mb32ac24[m HEAD@{17}: pull origin main --rebase (finish): returning to refs/heads/main
+[33mb32ac24[m HEAD@{18}: pull origin main --rebase (start): checkout b32ac2427cfee01d3b81aa2937f3caa4644d3d1c
+[33m4e041eb[m HEAD@{19}: rebase (abort): returning to refs/heads/main
+[33m82dd964[m HEAD@{20}: commit: adding
+[33m6ca7ddc[m HEAD@{21}: commit: Ignore .env file
+[33mfa98203[m HEAD@{22}: commit: Remove .env file
+[33m1c62aad[m HEAD@{23}: pull origin main --rebase (pick): Remove .env from repo and ignore it
+[33m363d330[m HEAD@{24}: pull origin main --rebase (start): checkout 363d330e035b32497277df5667cd129c1af5d91b
+[33m4e041eb[m HEAD@{25}: commit: your changes
+[33maee2178[m HEAD@{26}: commit: Remove .env from repo and ignore it
+[33m128224a[m HEAD@{27}: commit: adding
+[33m39c0c60[m HEAD@{28}: commit: Removed .env from Git tracking
+[33m59b0dcd[m HEAD@{29}: commit: adding video demo link
+[33m68cf382[m HEAD@{30}: commit: adding app screenshots
+[33m51f0d39[m HEAD@{31}: commit: Removed .env from Git tracking
+[33m9d75b62[m HEAD@{32}: commit: adding readme file
+[33m55b4b86[m HEAD@{33}: Branch: renamed refs/heads/main to refs/heads/main
+[33m55b4b86[m HEAD@{35}: commit (initial): first commit
