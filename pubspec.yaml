@@ -16,7 +16,7 @@ dependencies:
   google_fonts: ^6.2.1
 
   # Lottie animations
-  lottie: ^2.7.0
+  lottie: ^3.3.1
 
 
   # Speech and TTS
@@ -29,7 +29,7 @@ dependencies:
 
   # HTTP & environment variables
   http: ^1.2.3
-  flutter_dotenv: ^5.2.0
+  flutter_dotenv: ^6.0.0
 
   # Local storage
   get_storage: ^2.1.1
@@ -39,11 +39,17 @@ dependencies:
 
   # Cupertino icons
   cupertino_icons: ^1.0.6
+  firebase_core: ^4.1.0
+  firebase_auth: ^6.0.2
+  cloud_firestore: ^6.0.1
+  camera: ^0.11.2
+  permission_handler: ^12.0.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^6.0.0
   google_fonts: ^6.0.0
 
 flutter:

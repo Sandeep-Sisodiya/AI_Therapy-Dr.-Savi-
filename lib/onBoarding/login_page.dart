@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../Widgets/custom_button.dart';
-import '../custom_background.dart';
 import 'on_boarding.dart';
 import 'signup_page.dart';
 
@@ -16,32 +15,34 @@ class LoginPage extends StatelessWidget {
   }
 
   void _showPopup(BuildContext context, String message, {bool success = false}) {
-    Get.dialog(
-      Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          decoration: BoxDecoration(
-            color: success ? Colors.green.withOpacity(0.85) : Colors.red.withOpacity(0.85),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    if (!Get.isDialogOpen!) {
+      Get.dialog(
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
+            decoration: BoxDecoration(
+              color: success ? Colors.green.withOpacity(0.85) : Colors.red.withOpacity(0.85),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-      ),
-      barrierColor: Colors.black.withOpacity(0.3),
-    );
+        barrierColor: Colors.black.withOpacity(0.3),
+      );
 
-    Future.delayed(const Duration(seconds: 2), () {
-      if (Get.isDialogOpen ?? false) Get.back();
-    });
+      Future.delayed(const Duration(seconds: 2), () {
+        if (Get.isDialogOpen ?? false) Get.back();
+      });
+    }
   }
 
   @override
@@ -51,8 +52,20 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true, // fixes keyboard overflow
-      body: CustomBackground(
-        otherWidget: Padding(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF5DBAC), // Light Peach
+              Color(0xFFFFE4E1), // Misty Rose
+            ],
+          ),
+        ),
+        child: Padding(
           padding: const EdgeInsets.all(25),
           child: Center(
             child: SingleChildScrollView(
@@ -122,7 +135,7 @@ class LoginPage extends StatelessWidget {
 
                   CustomButton(
                     text: "Login",
-                    onPressed: () {
+                    onPressed: () async {
                       final email = emailController.text.trim();
                       final password = passwordController.text.trim();
 
@@ -139,24 +152,35 @@ class LoginPage extends StatelessWidget {
                         return;
                       }
 
-                      // Success
-                      _showPopup(context, "Login successful!", success: true);
+                      try {
+                        // ✅ Firebase Sign In
+                        UserCredential userCredential = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(email: email, password: password);
 
-                      Future.delayed(const Duration(seconds: 2), () {
-                        Get.off(
-                              () => const OnBoarding(),
-                          transition: Transition.rightToLeftWithFade,
-                          duration: const Duration(milliseconds: 600),
-                        );
-                      });
+                        if (userCredential.user != null) {
+                          _showPopup(context, "Login successful!", success: true);
+
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Get.off(
+                                  () => const OnBoarding(),
+                              transition: Transition.rightToLeftWithFade,
+                              duration: const Duration(milliseconds: 600),
+                            );
+                          });
+                        }
+                      } on FirebaseAuthException catch (e) {
+                        _showPopup(context, e.message ?? "Login failed");
+                      }
                     },
                   ),
 
                   const SizedBox(height: 15),
 
                   GestureDetector(
-                    onTap: () => Get.to(() => const SignupPage(),
-                        transition: Transition.rightToLeftWithFade),
+                    onTap: () => Get.to(
+                          () => const SignupPage(),
+                      transition: Transition.rightToLeftWithFade,
+                    ),
                     child: Text(
                       "Don’t have an account? Sign Up",
                       style: GoogleFonts.kaushanScript(

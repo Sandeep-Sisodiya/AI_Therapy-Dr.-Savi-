@@ -1,14 +1,16 @@
-import 'package:ai_therapy/View/home_view.dart';
+import 'package:ai_therapy/onBoarding/audio_conversation_page.dart';
 import 'package:ai_therapy/constants.dart';
 import 'package:ai_therapy/custom_background.dart';
+import 'package:ai_therapy/onBoarding/video_conversation_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:get/get.dart';
 
 import '../Controllers/user_controller.dart';
 
-class ConverstaionModeScreen extends StatelessWidget {
-  const ConverstaionModeScreen({super.key});
+class VideoConverstaionModeScreen extends StatelessWidget {
+  const VideoConverstaionModeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +28,18 @@ class ConverstaionModeScreen extends StatelessWidget {
                   children: [
                     Image.asset("assets/robot.png"),
                     Text(
-                      "All Set!",
-                      style: Theme.of(context).textTheme.displayLarge,
+                      "Are You Ready!",
+                      style: GoogleFonts.kaushanScript(
+                        textStyle: Theme.of(context).textTheme.displayLarge,
+                      ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Text(
                       "How are you feeling today?",
-                      style: Theme.of(context).textTheme.displayLarge,
+                      style: GoogleFonts.kaushanScript(
+                        textStyle: Theme.of(context).textTheme.displayLarge,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -45,7 +49,7 @@ class ConverstaionModeScreen extends StatelessWidget {
                   children: [
                     _mainButton(
                       context,
-                      "Let's start the Conversation",
+                      "Let's start Visual Conversation",
                       null,
                       Color(0xff061c18),
                     ),
@@ -79,7 +83,7 @@ class ConverstaionModeScreen extends StatelessWidget {
         }
 
         Get.to(
-              () => const HomeView(),
+              () => const VideoConversationPage(),
           curve: Curves.easeIn,
           transition: Transition.downToUp,
           // duration: const Duration(milliseconds: 300),

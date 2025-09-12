@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../Widgets/custom_button.dart';
-import '../custom_background.dart';
 import 'login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -20,32 +20,34 @@ class SignupPage extends StatelessWidget {
   }
 
   void _showPopup(BuildContext context, String message, {bool success = false}) {
-    Get.dialog(
-      Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          decoration: BoxDecoration(
-            color: success ? Colors.green.withOpacity(0.85) : Colors.red.withOpacity(0.85),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    if (!Get.isDialogOpen!) {
+      Get.dialog(
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
+            decoration: BoxDecoration(
+              color: success ? Colors.green.withOpacity(0.85) : Colors.red.withOpacity(0.85),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-      ),
-      barrierColor: Colors.black.withOpacity(0.3), // transparent background
-    );
+        barrierColor: Colors.black.withOpacity(0.3),
+      );
 
-    Future.delayed(const Duration(seconds: 2), () {
-      if (Get.isDialogOpen ?? false) Get.back();
-    });
+      Future.delayed(const Duration(seconds: 2), () {
+        if (Get.isDialogOpen ?? false) Get.back();
+      });
+    }
   }
 
   @override
@@ -57,8 +59,20 @@ class SignupPage extends StatelessWidget {
     final confirmPasswordController = TextEditingController();
 
     return Scaffold(
-      body: CustomBackground(
-        otherWidget: Padding(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF5DBAC),
+              Color(0xFFFFE4E1),
+            ],
+          ),
+        ),
+        child: Padding(
           padding: const EdgeInsets.all(25),
           child: Center(
             child: SingleChildScrollView(
@@ -66,7 +80,6 @@ class SignupPage extends StatelessWidget {
                 children: [
                   Image.asset("assets/ai3.png", height: 150),
                   const SizedBox(height: 20),
-
                   Text(
                     "Create Account ✨",
                     style: GoogleFonts.poppins(
@@ -83,7 +96,6 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -149,12 +161,10 @@ class SignupPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 25),
-
                   CustomButton(
                     text: "Sign Up",
-                    onPressed: () {
+                    onPressed: () async {
                       final fullName = fullNameController.text.trim();
                       final nickname = nicknameController.text.trim();
                       final email = emailController.text.trim();
@@ -178,19 +188,37 @@ class SignupPage extends StatelessWidget {
                         return;
                       }
 
-                      // Success
-                      _showPopup(context, "Account created successfully!", success: true);
+                      try {
+                        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
 
-                      Future.delayed(const Duration(seconds: 2), () {
-                        Get.off(() => const LoginPage(),
-                            transition: Transition.leftToRightWithFade,
-                            duration: const Duration(milliseconds: 600));
-                      });
+                        if (userCredential.user != null) {
+                          await FirebaseFirestore.instance.collection("users")
+                              .doc(userCredential.user!.uid)
+                              .set({
+                            "fullName": fullName,
+                            "nickname": nickname,
+                            "email": email,
+                          });
+
+                          _showPopup(context, "Account created successfully!", success: true);
+
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Get.off(
+                                  () => const LoginPage(),
+                              transition: Transition.leftToRightWithFade,
+                              duration: const Duration(milliseconds: 600),
+                            );
+                          });
+                        }
+                      } on FirebaseAuthException catch (e) {
+                        _showPopup(context, e.message ?? "Signup failed");
+                      }
                     },
                   ),
-
                   const SizedBox(height: 15),
-
                   GestureDetector(
                     onTap: () => Get.to(() => const LoginPage(),
                         transition: Transition.rightToLeftWithFade),

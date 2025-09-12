@@ -1,12 +1,15 @@
+import 'package:ai_therapy/onBoarding/audio_conversation_mode_screen.dart';
 import 'package:ai_therapy/onBoarding/login_page.dart';
 import 'package:ai_therapy/onBoarding/on_boarding.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'firebase_options.dart';
 
 // ✅ Import your screens
-import 'package:ai_therapy/View/home_view.dart';
+import 'package:ai_therapy/onBoarding/audio_conversation_page.dart';
 import 'package:ai_therapy/onBoarding/mode_selection_screen.dart';
 
 // ✅ Import your controllers
@@ -20,22 +23,19 @@ import 'constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Initialize GetStorage
-  await GetStorage.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  // ✅ Load .env file
+  await GetStorage.init();
   await dotenv.load(fileName: ".env");
 
-  // ✅ Register controllers first (order matters!)
-  Get.put(UserController());      // Required by ChatController.basePrompt
-  Get.put(ChatController());      // Required by ApiService
-
-  // ✅ Register services after controllers
-  Get.put(ApiService());          // ApiService uses ChatController.basePrompt
+  Get.put(UserController());
+  Get.put(ChatController());
+  Get.put(ApiService());
 
   runApp(const MyApp());
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -51,8 +51,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    if (box.read("firstTime") != null) {
-      firstTime = box.read("firstTime");
+    // ✅ Read firstTime value safely
+    final storedValue = box.read("firstTime");
+    if (storedValue != null && storedValue is bool) {
+      firstTime = storedValue;
     } else {
       box.write("firstTime", false);
     }
@@ -125,13 +127,9 @@ class _MyAppState extends State<MyApp> {
         ),
         useMaterial3: true,
       ),
-      // ✅ Set initial screen here
-      // home: const ModeSelectionScreen(),
-      // home: OnBoarding(),
-      // home : firstTime ? const ModeSelectionScreen() : const HomeView(),
-      // home: ChatModeScreen(),
-      // home: ModeSelectionScreen(),
       home: LoginPage(),
+      // home: ConverstaionModeScreen(),
+      // home: ModeSelectionScreen(),
     );
   }
 }
@@ -167,7 +165,6 @@ class _RectSliderThumbShape extends SliderComponentShape {
       center: center,
       width: width,
       height: 45,
-    //   abc
     );
     context.canvas.drawRRect(
       RRect.fromRectAndRadius(rect, Radius.circular(width / 2)),

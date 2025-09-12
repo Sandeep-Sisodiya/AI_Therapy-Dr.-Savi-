@@ -8,7 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import '../onBoarding/customize_attributes_screen.dart';
+import 'customize_attributes_screen.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -171,7 +171,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   : "Start Speaking by pressing\nthe above button",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white,
+                color: Colors.black26,
               ),
             ),
 

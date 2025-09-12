@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448449128315",
+    "project_id": "ai-therapy-57d74",
+    "storage_bucket": "ai-therapy-57d74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448449128315:android:f0ba6ebbed044bbc2c3fde",
+        "android_client_info": {
+          "package_name": "com.example.ai_therapy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHDoI-XxWZ62hY-WhJMbnsReilatXkBMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

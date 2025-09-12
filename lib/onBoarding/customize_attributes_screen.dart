@@ -1,7 +1,7 @@
 import 'package:ai_therapy/Widgets/custom_button.dart';
 import 'package:ai_therapy/Widgets/custom_slider.dart';
 import 'package:ai_therapy/custom_background.dart';
-import 'package:ai_therapy/onBoarding/conversation_mode_screen.dart';
+import 'package:ai_therapy/onBoarding/audio_conversation_mode_screen.dart';
 import 'package:ai_therapy/onBoarding/mode_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
