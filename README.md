@@ -21,7 +21,6 @@ Watch **Dr. Savi** in action here:
 
 ## 📸 Screenshots
 
-![App Screenshot 1](assets/app_Scrrenshot/app0.png)
 ![App Screenshot 1](assets/app_Scrrenshot/app1.png)  
 ![App Screenshot 2](assets/app_Scrrenshot/app2.png)  
 ![App Screenshot 3](assets/app_Scrrenshot/app3.png)
