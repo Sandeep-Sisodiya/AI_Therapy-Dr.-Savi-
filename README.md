@@ -15,7 +15,7 @@ Existing solutions often fail to be **personalized, affordable, and culturally i
 
 Watch **Dr. Savi** in action here:
 
-👉 [View Demo Video on Google Drive](https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing)
+👉 [View Demo Video on Google Drive](https://drive.google.com/file/d/1kUFjjuZVkC5_Klc4veQyLVcLgeQrfCjy/view?usp=sharing)
 
 ---
 
