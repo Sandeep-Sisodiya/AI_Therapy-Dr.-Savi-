@@ -114,6 +114,7 @@ class SignupPage extends StatelessWidget {
                       children: [
                         TextField(
                           controller: fullNameController,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Full Name",
                             border: InputBorder.none,
@@ -123,6 +124,7 @@ class SignupPage extends StatelessWidget {
                         const Divider(color: Colors.black54),
                         TextField(
                           controller: nicknameController,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Nickname",
                             border: InputBorder.none,
@@ -132,6 +134,7 @@ class SignupPage extends StatelessWidget {
                         const Divider(color: Colors.black54),
                         TextField(
                           controller: emailController,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Email",
                             border: InputBorder.none,
@@ -142,6 +145,7 @@ class SignupPage extends StatelessWidget {
                         TextField(
                           controller: passwordController,
                           obscureText: true,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Password",
                             border: InputBorder.none,
@@ -152,6 +156,7 @@ class SignupPage extends StatelessWidget {
                         TextField(
                           controller: confirmPasswordController,
                           obscureText: true,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Confirm Password",
                             border: InputBorder.none,

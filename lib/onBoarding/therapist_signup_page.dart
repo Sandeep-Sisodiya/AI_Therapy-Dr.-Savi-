@@ -106,6 +106,7 @@ class TherapistSignupPage extends StatelessWidget {
                       children: [
                         TextField(
                           controller: nameController,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Full Name",
                             border: InputBorder.none,
@@ -115,6 +116,7 @@ class TherapistSignupPage extends StatelessWidget {
                         const Divider(color: Colors.black54),
                         TextField(
                           controller: emailController,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Email",
                             border: InputBorder.none,
@@ -125,6 +127,7 @@ class TherapistSignupPage extends StatelessWidget {
                         TextField(
                           controller: passwordController,
                           obscureText: true,
+                          style: const TextStyle(color: Color(0xFF000000)),
                           decoration: const InputDecoration(
                             hintText: "Password",
                             border: InputBorder.none,
