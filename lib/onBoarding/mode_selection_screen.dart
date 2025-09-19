@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:ai_therapy/onBoarding/saved_summary_screen.dart';
+import 'package:ai_therapy/onBoarding/therapist_list_page.dart';
 import 'package:ai_therapy/onBoarding/video_conversation_mode_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -99,7 +100,13 @@ class ModeSelectionScreen extends StatelessWidget {
                               color: Color(0xFFB72B1E),
                             ),
                             SizedBox(height: 20,),
-
+                            CustomButton(
+                              text: "🩺 Consult Physical Therapist",
+                              onPressed: () =>
+                                  Get.to(() => const TherapistListPage()),
+                              color: Color(0xFF611D8A),
+                            ),
+                            SizedBox(height: 20,),
                           ],
                         ),
                       ),

@@ -44,6 +44,11 @@ dependencies:
   cloud_firestore: ^6.0.1
   camera: ^0.11.2
   permission_handler: ^12.0.1
+  image_picker: ^0.8.7+5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.15
+
 
 
 dev_dependencies:
@@ -51,6 +56,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   google_fonts: ^6.0.0
+  hive_generator: ^2.0.0
+  build_runner: ^2.4.0
 
 flutter:
   uses-material-design: true
