@@ -16,7 +16,8 @@ class ApiService {
   ].obs;
 
   final String baseUrl =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent";
+
 
   static FlutterTts flutterTts = FlutterTts();
   double volume = 0.7;
@@ -53,7 +54,6 @@ class ApiService {
   Future<void> _setAwaitOptions() async {
     await flutterTts.awaitSpeakCompletion(true);
   }
-
 
   Future<void> _getDefaultEngine() async {
     var engine = await flutterTts.getDefaultEngine;
