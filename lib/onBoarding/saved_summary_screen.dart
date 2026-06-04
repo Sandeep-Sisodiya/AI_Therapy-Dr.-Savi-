@@ -1,7 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../app_theme.dart';
 import '../custom_background.dart';
 import 'summary_screen.dart';
 
@@ -36,6 +40,66 @@ class _SavedSummariesScreenState extends State<SavedSummariesScreen> {
       savedSummaries[index]['achieved'] = true;
       box.write('savedSummaries', savedSummaries);
     });
+    Get.snackbar(
+      "Congratulations!",
+      "You have achieved your target! Keep it up.",
+      backgroundColor: AppColors.auroraTeal.withOpacity(0.2),
+      colorText: AppColors.starWhite,
+      borderColor: AppColors.auroraTeal.withOpacity(0.4),
+      borderWidth: 1,
+      borderRadius: 12,
+      margin: const EdgeInsets.all(16),
+    );
+  }
+
+  void deleteSummary(int index) {
+    setState(() {
+      savedSummaries.removeAt(index);
+      box.write('savedSummaries', savedSummaries);
+    });
+    Get.snackbar(
+      "Deleted",
+      "Summary removed successfully.",
+      backgroundColor: AppColors.cosmicIndigo.withOpacity(0.8),
+      colorText: AppColors.starWhite,
+      borderRadius: 12,
+      margin: const EdgeInsets.all(16),
+    );
+  }
+
+  void showOptionsDialog(int index) {
+    Get.defaultDialog(
+      title: "Remove Summary",
+      titleStyle: AppTypography.headlineLarge.copyWith(color: AppColors.starWhite),
+      middleText: "Are you sure you want to delete this summary?",
+      middleTextStyle: AppTypography.bodyMedium,
+      backgroundColor: AppColors.midnightBlue,
+      radius: 16,
+      contentPadding: const EdgeInsets.all(20),
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text(
+            "Cancel",
+            style: AppTypography.labelMedium.copyWith(color: AppColors.moonGray),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.errorRed,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          ),
+          onPressed: () {
+            deleteSummary(index);
+            Get.back();
+          },
+          child: Text(
+            "Delete",
+            style: AppTypography.labelMedium.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -47,169 +111,230 @@ class _SavedSummariesScreenState extends State<SavedSummariesScreen> {
             children: [
               // Custom styled AppBar Row
               Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "🍎 Saved Summaries",
-                      style: GoogleFonts.chewy(
-                        fontSize: 28,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                              color: AppColors.starWhite, size: 20),
+                          onPressed: () => Get.back(),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          "Saved Plans",
+                          style: AppTypography.displaySmall,
+                        ),
+                      ],
                     ),
                     IconButton(
-                      icon: const Icon(Icons.refresh, color: Colors.black87),
+                      icon: const Icon(Icons.refresh_rounded, color: AppColors.starWhite),
                       tooltip: "Reload",
                       onPressed: loadSummaries,
                     ),
                   ],
                 ),
               ),
-              const Divider(color: Colors.black, thickness: 2.2),
 
               // Saved Summaries List
               Expanded(
                 child: savedSummaries.isEmpty
                     ? Center(
-                  child: Text(
-                    "No saved summaries yet",
-                    style: GoogleFonts.patuaOne(
-                      fontSize: 18,
-                      color: Colors.black45,
-                    ),
-                  ),
-                )
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.bookmark_outline_rounded,
+                              size: 64,
+                              color: AppColors.moonGray.withOpacity(0.4),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              "No saved plans yet",
+                              style: AppTypography.headlineMedium.copyWith(
+                                color: AppColors.moonGray,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "Save a conversation summary to view it here",
+                              style: AppTypography.bodySmall,
+                            ),
+                          ],
+                        ),
+                      )
                     : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: savedSummaries.length,
-                  itemBuilder: (context, index) {
-                    final summary = savedSummaries[index];
-                    final achieved = summary['achieved'] ?? false;
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        itemCount: savedSummaries.length,
+                        itemBuilder: (context, index) {
+                          final summary = savedSummaries[index];
+                          final achieved = summary['achieved'] ?? false;
 
-                    return GestureDetector(
-                      onLongPress: () {
-                        Get.defaultDialog(
-                          title: "Options",
-                          titleStyle: GoogleFonts.patuaOne(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          middleText: "Choose an action",
-                          middleTextStyle: GoogleFonts.patuaOne(
-                            fontSize: 16,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  savedSummaries.removeAt(index);
-                                  box.write('savedSummaries', savedSummaries);
-                                });
-                                Get.back();
-                              },
-                              child: Text(
-                                "Delete",
-                                style: GoogleFonts.patuaOne(
-                                  fontSize: 16,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                "Cancel",
-                                style: GoogleFonts.patuaOne(
-                                  fontSize: 16,
-                                  color: Colors.teal,
-                                ),
-                              ),
-                            ),
-                          ],
-                          backgroundColor: Colors.white,
-                          radius: 12,
-                        );
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: achieved
-                              ? Colors.green.shade300.withOpacity(0.2)
-                              : Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: achieved
-                                ? const Color(0xFFA9670F)
-                                : Colors.black26,
-                            width: 2,
-                          ),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4,
-                              offset: Offset(2, 2),
-                            )
-                          ],
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            summary['summary'] ?? '',
-                            style: GoogleFonts.patuaOne(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 6.0),
-                            child: Text(
-                              (summary['daywise'] as List<dynamic>?)?.join(", ") ?? '',
-                              style: GoogleFonts.patuaOne(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          trailing: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                              achieved ? Colors.grey : const Color(0xFFA9670F),
-                              shape: RoundedRectangleBorder(
+                          return GestureDetector(
+                            onLongPress: () => showOptionsDialog(index),
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(18),
+                                    decoration: achieved
+                                        ? GlassDecoration.accentCard(
+                                            glowColor: AppColors.auroraTeal,
+                                            borderRadius: 20,
+                                          )
+                                        : GlassDecoration.card(borderRadius: 20),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            // Icon / Badge status
+                                            Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: achieved
+                                                    ? AppColors.auroraTeal.withOpacity(0.15)
+                                                    : AppColors.auroraLavender.withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Icon(
+                                                achieved
+                                                    ? Icons.emoji_events_rounded
+                                                    : Icons.auto_awesome_rounded,
+                                                color: achieved
+                                                    ? AppColors.auroraTeal
+                                                    : AppColors.auroraLavender,
+                                                size: 20,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            // Summary title
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    summary['summary'] ?? '',
+                                                    style: AppTypography.bodyLarge.copyWith(
+                                                      fontWeight: FontWeight.w600,
+                                                      color: AppColors.starWhite,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    (summary['daywise'] as List<dynamic>?)
+                                                            ?.join(" • ") ??
+                                                        '',
+                                                    style: AppTypography.bodySmall.copyWith(
+                                                      color: AppColors.moonGray,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 16),
+                                        // Bottom actions inside card
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Get.to(() => SummaryScreen(summaryData: summary));
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "View Plan",
+                                                    style: AppTypography.labelSmall.copyWith(
+                                                      color: AppColors.auroraLavender,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  const Icon(
+                                                    Icons.arrow_forward_rounded,
+                                                    size: 14,
+                                                    color: AppColors.auroraLavender,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            if (achieved)
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 12, vertical: 6),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.auroraTeal.withOpacity(0.15),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: AppColors.auroraTeal.withOpacity(0.3),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.check_circle_outline_rounded,
+                                                      color: AppColors.auroraTeal,
+                                                      size: 14,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      "Achieved",
+                                                      style: AppTypography.labelSmall.copyWith(
+                                                        color: AppColors.auroraTeal,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            else
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: AppColors.auroraTeal,
+                                                  foregroundColor: Colors.black,
+                                                  padding: const EdgeInsets.symmetric(
+                                                      horizontal: 16, vertical: 8),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                ),
+                                                onPressed: () => markTargetAchieved(index),
+                                                child: Text(
+                                                  "Complete Target",
+                                                  style: AppTypography.labelSmall.copyWith(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            child: Text(
-                              achieved ? "Achieved" : "Mark Achieved",
-                              style: GoogleFonts.patuaOne(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: achieved
-                                ? null
-                                : () => markTargetAchieved(index),
-                          ),
-                          onTap: () {
-                            Get.to(() => SummaryScreen(summaryData: summary));
-                          },
-                        ),
+                          ).animate().fadeIn(
+                                delay: (100 * index).ms,
+                                duration: 400.ms,
+                              );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
-
             ],
           ),
         ),
