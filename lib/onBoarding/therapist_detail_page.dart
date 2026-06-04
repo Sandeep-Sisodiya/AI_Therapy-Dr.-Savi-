@@ -1,7 +1,13 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../Models/therapist_model.dart';
+import '../app_theme.dart';
+import '../custom_background.dart';
 
 class TherapistDetailPage extends StatelessWidget {
   final TherapistModel therapist;
@@ -10,83 +16,176 @@ class TherapistDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7), // soft professional background
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+      body: CustomBackground(
+        otherWidget: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: GestureDetector(
-                  onTap: () => _showImageDialog(context, therapist.doctorIdPath),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: FileImage(File(therapist.doctorIdPath)),
-                  ),
+              // Custom styled AppBar Row
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                          color: AppColors.starWhite, size: 20),
+                      onPressed: () => Get.back(),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Therapist Profile",
+                      style: AppTypography.displaySmall,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: Text(
-                  therapist.name,
-                  style: GoogleFonts.poppins(
-                      fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
-              ),
-              Center(
-                child: Text(
-                  therapist.specialization,
-                  style: GoogleFonts.poppins(
-                      fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black54),
-                ),
-              ),
-              const SizedBox(height: 30),
 
-              // Info Card
-              _buildInfoCard([
-                _buildDetail("Gender", therapist.gender),
-                _buildDetail("Phone", therapist.phone),
-                if (therapist.altPhone.isNotEmpty)
-                  _buildDetail("Alternate Phone", therapist.altPhone),
-                _buildDetail("Email", therapist.email),
-                _buildDetail("Clinic/Hospital", therapist.clinic),
-                _buildDetail("Degrees", therapist.degrees),
-                _buildDetail("Experience", therapist.experience),
-                _buildDetail("Consultation Fees", therapist.fees),
-              ]),
+              // Detail content
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Doctor Photo & Header Info
+                      Center(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showImageDialog(context, therapist.doctorIdPath),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.auroraTeal.withOpacity(0.6),
+                                    width: 3,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.auroraTeal.withOpacity(0.3),
+                                      blurRadius: 20,
+                                      spreadRadius: -2,
+                                    )
+                                  ],
+                                ),
+                                child: CircleAvatar(
+                                  radius: 56,
+                                  backgroundColor: AppColors.cosmicIndigo,
+                                  backgroundImage: therapist.doctorIdPath.isNotEmpty
+                                      ? FileImage(File(therapist.doctorIdPath))
+                                      : null,
+                                  child: therapist.doctorIdPath.isEmpty
+                                      ? const Icon(Icons.person_rounded,
+                                          color: AppColors.auroraTeal, size: 40)
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              therapist.name,
+                              style: AppTypography.displayMedium.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.auroraTeal.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.auroraTeal.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Text(
+                                therapist.specialization,
+                                style: AppTypography.labelSmall.copyWith(
+                                  color: AppColors.auroraTeal,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ).animate().fadeIn(duration: 500.ms),
 
-              const SizedBox(height: 20),
+                      const SizedBox(height: 32),
 
-              // Bio Card
-              _buildCard(title: "Bio", child: Text(
-                therapist.bio,
-                style: GoogleFonts.poppins(fontSize: 16, color: Colors.black87, height: 1.5),
-              )),
-
-              const SizedBox(height: 20),
-
-              // Documents Card
-              Center(
-                child: _buildCard(
-                  title: "Documents",
-                  child: Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: therapist.documentPaths.map((path) => GestureDetector(
-                      onTap: () => _showImageDialog(context, path),
-                      child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(
-                            File(path),
-                            width: 300,
-                            height: 300,
-                            fit: BoxFit.cover,
+                      // Bio Card
+                      _buildCard(
+                        title: "Biography",
+                        icon: Icons.description_outlined,
+                        child: Text(
+                          therapist.bio,
+                          style: AppTypography.bodyLarge.copyWith(
+                            color: AppColors.starWhite.withOpacity(0.95),
+                            height: 1.6,
                           ),
                         ),
-                      ),
-                    )).toList(),
+                      ).animate().fadeIn(delay: 100.ms),
+
+                      const SizedBox(height: 20),
+
+                      // Info List Card
+                      _buildCard(
+                        title: "General Information",
+                        icon: Icons.info_outline_rounded,
+                        child: Column(
+                          children: [
+                            _buildDetailRow("Gender", therapist.gender, Icons.wc_rounded),
+                            _buildDetailRow("Phone", therapist.phone, Icons.phone_outlined),
+                            if (therapist.altPhone.isNotEmpty)
+                              _buildDetailRow("Alt Phone", therapist.altPhone, Icons.phone_android_outlined),
+                            _buildDetailRow("Email", therapist.email, Icons.email_outlined),
+                            _buildDetailRow("Clinic/Hospital", therapist.clinic, Icons.location_on_outlined),
+                            _buildDetailRow("Degrees", therapist.degrees, Icons.school_outlined),
+                            _buildDetailRow("Experience", "${therapist.experience} Years", Icons.work_history_outlined),
+                            _buildDetailRow("Consultation Fees", therapist.fees, Icons.attach_money_outlined),
+                          ],
+                        ),
+                      ).animate().fadeIn(delay: 200.ms),
+
+                      const SizedBox(height: 20),
+
+                      // Documents Card
+                      if (therapist.documentPaths.isNotEmpty)
+                        _buildCard(
+                          title: "Verification Documents",
+                          icon: Icons.verified_user_outlined,
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: therapist.documentPaths.length,
+                            itemBuilder: (context, index) {
+                              final path = therapist.documentPaths[index];
+                              return GestureDetector(
+                                onTap: () => _showImageDialog(context, path),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: AppColors.glassBorder),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.file(
+                                      File(path),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ).animate().fadeIn(delay: 300.ms),
+
+                      const SizedBox(height: 40),
+                    ],
                   ),
                 ),
               ),
@@ -97,74 +196,102 @@ class TherapistDetailPage extends StatelessWidget {
     );
   }
 
-  // Card for general info
-  Widget _buildInfoCard(List<Widget> children) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: const Offset(0, 5))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
-      ),
-    );
-  }
-
   // Generic Card with title
-  Widget _buildCard({required String title, required Widget child}) {
+  Widget _buildCard({required String title, required IconData icon, required Widget child}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: const Offset(0, 5))],
+        color: Colors.transparent,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
-          const SizedBox(height: 10),
-          child,
-        ],
-      ),
-    );
-  }
-
-  // Detail row for info card
-  Widget _buildDetail(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: RichText(
-        text: TextSpan(
-          text: "$title: ",
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 16),
-          children: [TextSpan(
-            text: value,
-            style: GoogleFonts.poppins(fontWeight: FontWeight.normal, color: Colors.black87, fontSize: 16),
-          )],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: GlassDecoration.card(borderRadius: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, color: AppColors.auroraTeal, size: 20),
+                    const SizedBox(width: 10),
+                    Text(
+                      title,
+                      style: AppTypography.headlineLarge.copyWith(
+                        color: AppColors.auroraTeal,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                child,
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  // Show image in full-screen
+  // Detail row for info card
+  Widget _buildDetailRow(String title, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColors.moonGray.withOpacity(0.7), size: 18),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$title: ",
+                  style: AppTypography.bodyMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.moonGray,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    value,
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.starWhite,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Show image in full-screen with blurred backdrop
   void _showImageDialog(BuildContext context, String imagePath) {
     showDialog(
       context: context,
-      builder: (_) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: InteractiveViewer(
-            panEnabled: true,
-            minScale: 0.5,
-            maxScale: 3.0,
-            child: Image.file(File(imagePath)),
+      builder: (_) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: InteractiveViewer(
+              panEnabled: true,
+              minScale: 0.5,
+              maxScale: 3.0,
+              child: Image.file(
+                File(imagePath),
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
       ),
