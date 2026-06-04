@@ -4,9 +4,10 @@ import 'package:ai_therapy/custom_background.dart';
 import 'package:ai_therapy/onBoarding/audio_conversation_mode_screen.dart';
 import 'package:ai_therapy/onBoarding/mode_selection_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+import '../app_theme.dart';
 import '../Controllers/user_controller.dart';
 
 class CustomizeAttributesScreen extends StatelessWidget {
@@ -18,7 +19,6 @@ class CustomizeAttributesScreen extends StatelessWidget {
     final userController =
         Get.find<UserController>() ?? Get.put(UserController());
     return Scaffold(
-      // appBar: AppBar(),
       body: CustomBackground(
         otherWidget: SafeArea(
           child: Padding(
@@ -28,38 +28,26 @@ class CustomizeAttributesScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Text(
-                      "🧣What should I bring to the table❓",
+                      "Customize Your AI",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.chewy(
-                        fontSize: Theme.of(context).textTheme.displayLarge?.fontSize ?? 48,
-                        color: Theme.of(context).textTheme.displayLarge?.color ?? Colors.black,
-                        fontWeight: Theme.of(context).textTheme.displayLarge?.fontWeight ?? FontWeight.normal,
-                      ),
-                    ),
+                      style: AppTypography.displayMedium,
+                    ).animate().fadeIn(duration: 500.ms),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 12),
+
                     Text(
-                      "👉Design your dream AI👈",
-                      style: GoogleFonts.kaushanScript(
-                        fontSize: Theme.of(context).textTheme.displaySmall?.fontSize ?? 36,
-                        color: Theme.of(context).textTheme.displaySmall?.color ?? Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      "Design how Dr. Savi responds to you",
+                      style: AppTypography.bodyMedium,
                       textAlign: TextAlign.center,
-                    ),
-
+                    ).animate().fadeIn(delay: 200.ms, duration: 500.ms),
                   ],
                 ),
                 Column(
                   children: [
                     Obx(
-                          () => CustomSlider(
+                      () => CustomSlider(
                         leadingText: "Empathy",
                         trailingText: "Understanding",
                         defaultValue: userController.empUnd.value.toDouble(),
@@ -67,9 +55,9 @@ class CustomizeAttributesScreen extends StatelessWidget {
                           userController.empUnd.value = value.round();
                         },
                       ),
-                    ),
+                    ).animate().fadeIn(delay: 300.ms, duration: 500.ms),
                     Obx(
-                          () => CustomSlider(
+                      () => CustomSlider(
                         leadingText: "Listening",
                         trailingText: "Solutioning",
                         defaultValue: userController.lisSol.value.toDouble(),
@@ -77,9 +65,9 @@ class CustomizeAttributesScreen extends StatelessWidget {
                           userController.lisSol.value = value.round();
                         },
                       ),
-                    ),
+                    ).animate().fadeIn(delay: 450.ms, duration: 500.ms),
                     Obx(
-                          () => CustomSlider(
+                      () => CustomSlider(
                         leadingText: "Holistic",
                         trailingText: "Targeted",
                         defaultValue: userController.hoTa.value.toDouble(),
@@ -87,21 +75,19 @@ class CustomizeAttributesScreen extends StatelessWidget {
                           userController.hoTa.value = value.round();
                         },
                       ),
-                    ),
+                    ).animate().fadeIn(delay: 600.ms, duration: 500.ms),
                   ],
                 ),
-                // const Spacer(),
                 CustomButton(
-                    text: saveDetails ? "Save" : "Continue",
-                    onPressed: () {
-                      if (saveDetails) {
-                        Get.back();
-                      } else {
-                        // Get.to(() => const ConverstaionModeScreen());
-                        Get.to(() => const ModeSelectionScreen());
-
-                      }
-                    })
+                  text: saveDetails ? "Save" : "Continue",
+                  onPressed: () {
+                    if (saveDetails) {
+                      Get.back();
+                    } else {
+                      Get.to(() => const ModeSelectionScreen());
+                    }
+                  },
+                ).animate().fadeIn(delay: 750.ms, duration: 500.ms),
               ],
             ),
           ),

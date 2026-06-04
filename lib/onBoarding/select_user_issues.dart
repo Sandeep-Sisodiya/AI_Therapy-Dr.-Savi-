@@ -3,10 +3,11 @@ import 'package:ai_therapy/Widgets/custom_button.dart';
 import 'package:ai_therapy/custom_background.dart';
 import 'package:ai_therapy/onBoarding/customize_attributes_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:vibration/vibration.dart';
 import 'package:get/get.dart';
 
+import '../app_theme.dart';
 import '../constants.dart';
 
 class SelectUserIssues extends StatefulWidget {
@@ -41,58 +42,38 @@ class _SelectUserIssuesState extends State<SelectUserIssues> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 10),
                         Text(
-                          "🧣What’s on your mind today❓",
-                          // 🧠🧣🌹🍉🍓💢
+                          "What's on your mind today?",
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.chewy(
-                            fontSize: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge
-                                    ?.fontSize ??
-                                48,
-                            color: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge
-                                    ?.color ??
-                                Colors.black,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                          style: AppTypography.displayMedium,
+                        ).animate().fadeIn(duration: 500.ms),
+
+                        const SizedBox(height: 12),
+
                         Text(
-                          "👉Feel free to pick as many options as you like👈",
+                          "Feel free to pick as many as you like",
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.kaushanScript(
-                            fontSize: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.fontSize ??
-                                24,
-                            color: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.color ??
-                                Colors.black,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        _buildIssuesChips(specificIssues),
+                          style: AppTypography.bodyMedium,
+                        ).animate().fadeIn(delay: 200.ms, duration: 500.ms),
+
+                        const SizedBox(height: 28),
+
+                        _buildIssuesChips(specificIssues)
+                            .animate()
+                            .fadeIn(delay: 400.ms, duration: 600.ms),
+
                         const Spacer(),
+                        const SizedBox(height: 20),
+
                         CustomButton(
-                            text: "CONTINUE",
-                            onPressed: () {
-                              Get.to(const CustomizeAttributesScreen(
-                                saveDetails: false,
-                              ));
-                            })
+                          text: "CONTINUE",
+                          onPressed: () {
+                            Get.to(const CustomizeAttributesScreen(
+                              saveDetails: false,
+                            ));
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -106,40 +87,61 @@ class _SelectUserIssuesState extends State<SelectUserIssues> {
   }
 
   Widget _buildIssuesChips(List<String> issues) {
-    //user wrap widget to display the chips
     return Wrap(
-      spacing: 10,
-      runSpacing: 5,
+      spacing: 8,
+      runSpacing: 8,
       children: issues
           .map((issue) => Obx(
-                () => ChoiceChip(
-                  showCheckmark: false,
-                  selected: userController.userIssues.contains(issue),
-                  backgroundColor: userController.userIssues.contains(issue)
-                      ? buttonColor
-                      : Colors.transparent,
-                  onSelected: (value) async {
-                    if (await Vibration.hasVibrator() ?? false) {
-                      Vibration.vibrate(
-                          duration: 100); // short vibration for feedback
-                    }
-                    if (userController.userIssues.contains(issue)) {
-                      userController.userIssues.remove(issue);
-                    } else {
-                      userController.addIssue(issue);
-                    }
-                  },
-                  label: Text(
-                    issue,
-                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                          color: userController.userIssues.contains(issue)
-                              ? Colors.white
-                              : textColor,
+                () {
+                  final isSelected = userController.userIssues.contains(issue);
+                  return GestureDetector(
+                    onTap: () async {
+                      if (await Vibration.hasVibrator() ?? false) {
+                        Vibration.vibrate(duration: 100);
+                      }
+                      if (userController.userIssues.contains(issue)) {
+                        userController.userIssues.remove(issue);
+                      } else {
+                        userController.addIssue(issue);
+                      }
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppColors.auroraLavender.withOpacity(0.2)
+                            : AppColors.glassWhite,
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.auroraLavender
+                              : AppColors.glassBorder,
+                          width: isSelected ? 1.5 : 1,
                         ),
-                  ),
-                ),
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.auroraLavender.withOpacity(0.2),
+                                  blurRadius: 12,
+                                  spreadRadius: -2,
+                                ),
+                              ]
+                            : [],
+                      ),
+                      child: Text(
+                        issue,
+                        style: AppTypography.labelMedium.copyWith(
+                          color: isSelected
+                              ? AppColors.starWhite
+                              : AppColors.moonGray,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ))
           .toList(),
     );

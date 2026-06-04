@@ -1,10 +1,11 @@
 import 'package:ai_therapy/Widgets/custom_button.dart';
 import 'package:ai_therapy/onBoarding/select_user_issues.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:vibration/vibration.dart';
 import 'package:get/get.dart';
 
+import '../app_theme.dart';
 import '../custom_background.dart';
 
 class OnBoarding extends StatelessWidget {
@@ -21,83 +22,107 @@ class OnBoarding extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Image.asset(
-                  "assets/ai3.png",
-                  height: 200,
-                ),
-                // const SizedBox(
-                //   height: 50,
-                // ),
-                Column(
+                const SizedBox(height: 10),
+                // Robot with glow effect
+                Stack(
+                  alignment: Alignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                      width: 220,
+                      height: 220,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3), // semi-transparent
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            AppColors.auroraLavender.withOpacity(0.12),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                    Image.asset(
+                      "assets/ai3.png",
+                      height: 200,
+                    ),
+                  ],
+                ).animate().fadeIn(duration: 700.ms).scale(
+                      begin: const Offset(0.85, 0.85),
+                      end: const Offset(1, 1),
+                      duration: 700.ms,
+                    ),
+
+                Column(
+                  children: [
+                    // Hello badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 32),
+                      decoration: BoxDecoration(
+                        gradient: AppGradients.cardGradient,
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColors.auroraLavender.withOpacity(0.3),
+                          width: 1,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0xFFE3B37C), // Correct ARGB format
-                            blurRadius: 2,
-                            // offset: const Offset(0, 4),
+                            color: AppColors.glowPurple,
+                            blurRadius: 20,
+                            spreadRadius: -4,
                           ),
                         ],
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 3,
-                        ),
                       ),
                       child: Text(
                         "Hello 👋",
-                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          shadows: [
-                            const Shadow(
-                              blurRadius: 5,
-                              color: Colors.brown,
-                              offset: Offset(1, 1),
-                            ),
-                          ],
-                        ),
+                        style: AppTypography.displayLarge,
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
+                    ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
+
+                    const SizedBox(height: 36),
+
+                    // Dr. Savi introduction
                     Text(
-                      "I’m Dr. SAVI\n❤️\n A space to think, feel, and grow.",
+                      "I'm Dr. SAVI",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.kaushanScript(
-                        fontSize: Theme.of(context).textTheme.displayMedium?.fontSize ?? 36,
-                        color: Colors.black,
-                        shadows: const [
-                          Shadow(
-                            blurRadius: 1,
-                            color: Colors.brown,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
+                      style: AppTypography.displayMedium.copyWith(
+                        foreground: Paint()
+                          ..shader = const LinearGradient(
+                            colors: [
+                              AppColors.auroraLavender,
+                              AppColors.auroraRose,
+                            ],
+                          ).createShader(
+                              const Rect.fromLTWH(0, 0, 250, 40)),
                       ),
-                    ),
+                    ).animate().fadeIn(delay: 600.ms, duration: 600.ms),
+
+                    const SizedBox(height: 12),
+
+                    Text(
+                      "❤️\nA space to think, feel, and grow.",
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.moonGray,
+                        height: 1.6,
+                      ),
+                    ).animate().fadeIn(delay: 800.ms, duration: 600.ms),
                   ],
                 ),
+
                 CustomButton(
-                    text: "LET'S DO IT TOGETHER?",
-                    onPressed: ()async {
-                      if (await Vibration.hasVibrator() ?? false) {
-                      Vibration.vibrate(duration: 100); // short vibration for feedback
-                      }
-                      Get.to(
-                            () => const SelectUserIssues(),
-                        curve: Curves.easeIn,
-                        transition: Transition.rightToLeftWithFade,
-                      );
-                    }),
+                  text: "LET'S DO IT TOGETHER?",
+                  onPressed: () async {
+                    if (await Vibration.hasVibrator() ?? false) {
+                      Vibration.vibrate(duration: 100);
+                    }
+                    Get.to(
+                      () => const SelectUserIssues(),
+                      curve: Curves.easeIn,
+                      transition: Transition.rightToLeftWithFade,
+                    );
+                  },
+                ).animate().fadeIn(delay: 1000.ms, duration: 500.ms),
               ],
             ),
           ),

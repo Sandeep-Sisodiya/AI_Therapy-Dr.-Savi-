@@ -1,6 +1,8 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../app_theme.dart';
 import '../Controllers/chat_controller.dart';
 import '../Services/api_service.dart';
 
@@ -41,31 +43,46 @@ class _ChatModeScreenState extends State<ChatModeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppColors.deepNavy,
       appBar: AppBar(
-        elevation: 4,
-        backgroundColor: Colors.teal,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
-          tooltip: "Back",
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.starWhite, size: 20),
           onPressed: () => Get.back(),
         ),
-        title: Text(
-          "AI Chat [One step at a time]",
-          style: GoogleFonts.chewy(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 0.5,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: AppColors.auroraTeal.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.psychology_rounded,
+                  color: AppColors.auroraTeal, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              "Dr. Savi",
+              style: AppTypography.headlineLarge,
+            ),
+          ],
         ),
         centerTitle: true,
       ),
       body: Column(
         children: [
+          // Subtle divider
+          Container(
+            height: 0.5,
+            color: AppColors.glassBorder,
+          ),
+
+          // Messages
           Expanded(
             child: Obx(() {
               final messages = chatController.conversation
@@ -74,14 +91,19 @@ class _ChatModeScreenState extends State<ChatModeScreen> {
 
               if (messages.isEmpty) {
                 return Center(
-                  child: Text(
-                    "No chats yet. Start the conversation!",
-                    style: GoogleFonts.patuaOne(
-                      fontSize: 18,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.chat_bubble_outline_rounded,
+                          color: AppColors.moonGray.withOpacity(0.3), size: 56),
+                      const SizedBox(height: 16),
+                      Text(
+                        "Start the conversation",
+                        style: AppTypography.bodyLarge.copyWith(
+                          color: AppColors.moonGray.withOpacity(0.5),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }
@@ -98,19 +120,16 @@ class _ChatModeScreenState extends State<ChatModeScreen> {
 
               return ListView.builder(
                 controller: _scrollController,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final msg = messages[index];
                   final isUser = msg['role'] == 'user';
-                  final bubbleColor =
-                  isUser ? Colors.teal : Colors.grey.shade200;
-                  final textColor = isUser ? Colors.white : Colors.black87;
 
                   return Align(
-                    alignment: isUser
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
+                    alignment:
+                        isUser ? Alignment.centerRight : Alignment.centerLeft,
                     child: Column(
                       crossAxisAlignment: isUser
                           ? CrossAxisAlignment.end
@@ -118,49 +137,62 @@ class _ChatModeScreenState extends State<ChatModeScreen> {
                       children: [
                         Container(
                           constraints: BoxConstraints(
-                            maxWidth:
-                            MediaQuery.of(context).size.width * 0.75,
+                            maxWidth: MediaQuery.of(context).size.width * 0.78,
                           ),
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: bubbleColor,
+                            gradient: isUser
+                                ? AppGradients.primaryButtonGradient
+                                : null,
+                            color: isUser ? null : AppColors.glassWhite,
                             borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(12),
-                              topRight: const Radius.circular(12),
-                              bottomLeft: Radius.circular(isUser ? 12 : 0),
-                              bottomRight: Radius.circular(isUser ? 0 : 12),
+                              topLeft: const Radius.circular(18),
+                              topRight: const Radius.circular(18),
+                              bottomLeft: Radius.circular(isUser ? 18 : 4),
+                              bottomRight: Radius.circular(isUser ? 4 : 18),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(2, 2),
-                              ),
-                            ],
+                            border: isUser
+                                ? null
+                                : Border.all(
+                                    color: AppColors.glassBorder, width: 0.5),
                           ),
                           child: Text(
                             msg['content'] ?? '',
-                            style: GoogleFonts.patuaOne(
-                              color: textColor,
-                              fontSize: 16,
-                              height: 1.3,
+                            style: AppTypography.bodyLarge.copyWith(
+                              color: isUser
+                                  ? Colors.white
+                                  : AppColors.starWhite,
+                              height: 1.4,
                             ),
                           ),
                         ),
 
-                        // Listen button only for AI messages
+                        // Listen button for AI messages
                         if (!isUser)
-                          IconButton(
-                            icon: const Icon(Icons.volume_up),
-                            color: Colors.teal.shade700,
-                            tooltip: "Listen",
-                            onPressed: () async {
-                              if (msg['content'] != null) {
-                                await ApiService.flutterTts
-                                    .speak(msg['content']!);
-                              }
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4, bottom: 4),
+                            child: GestureDetector(
+                              onTap: () async {
+                                if (msg['content'] != null) {
+                                  await ApiService.flutterTts
+                                      .speak(msg['content']!);
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.auroraTeal.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.volume_up_rounded,
+                                  color: AppColors.auroraTeal,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
                           ),
                       ],
                     ),
@@ -170,50 +202,64 @@ class _ChatModeScreenState extends State<ChatModeScreen> {
             }),
           ),
 
-          Divider(
-            color: Colors.teal,
-            thickness: 2,
-            height: 0,
-          ),
-
           // Input area
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.midnightBlue,
+              border: Border(
+                top: BorderSide(color: AppColors.glassBorder, width: 0.5),
+              ),
+            ),
             child: SafeArea(
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _inputController,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => _sendMessage(),
-                      style: GoogleFonts.questrial(
-                        fontSize: 16,
-                        color: Colors.black87,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.glassWhite,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                            color: AppColors.glassBorder, width: 0.5),
                       ),
-                      decoration: InputDecoration(
-                        hintText: "Type a message...",
-                        hintStyle: GoogleFonts.questrial(
-                          fontSize: 16,
-                          color: Colors.black38,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 12),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                      child: TextField(
+                        controller: _inputController,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (_) => _sendMessage(),
+                        style: AppTypography.bodyLarge,
+                        decoration: InputDecoration(
+                          hintText: "Type a message...",
+                          hintStyle: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.moonGray.withOpacity(0.5),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 12),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Colors.teal,
-                    child: IconButton(
-                      icon: const Icon(Icons.send, color: Colors.white),
-                      tooltip: "Send",
-                      onPressed: _sendMessage,
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: _sendMessage,
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: AppGradients.primaryButtonGradient,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.auroraLavender.withOpacity(0.3),
+                            blurRadius: 12,
+                            spreadRadius: -2,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.send_rounded,
+                          color: Colors.white, size: 20),
                     ),
                   ),
                 ],

@@ -1,15 +1,13 @@
 import 'dart:ui';
-
 import 'package:ai_therapy/onBoarding/saved_summary_screen.dart';
 import 'package:ai_therapy/onBoarding/therapist_list_page.dart';
 import 'package:ai_therapy/onBoarding/video_conversation_mode_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../Widgets/custom_button.dart';
+import '../app_theme.dart';
 import '../custom_background.dart';
-import '../constants.dart';
 import 'chat_history_page.dart';
 import 'chat_mode_screen.dart';
 import 'audio_conversation_mode_screen.dart';
@@ -25,167 +23,198 @@ class ModeSelectionScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 10),
                 Text(
-                  "🍁 Choose Your Mode",
-                  // 🎯🦋🎀🎈🧣📍🍓🍉🍎🌹🍁🥀
+                  "Choose Your Mode",
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.chewy(
-                    fontSize:
-                        Theme.of(context).textTheme.displayLarge?.fontSize ??
-                            48,
-                    color: Theme.of(context).textTheme.displayLarge?.color ??
-                        Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "👉 Select how you want to interact 👈",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.kaushanScript(
-                    fontSize:
-                        Theme.of(context).textTheme.displaySmall?.fontSize ??
-                            24,
-                    color: Theme.of(context).textTheme.displaySmall?.color ??
-                        Colors.black,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                const SizedBox(height: 80),
+                  style: AppTypography.displayMedium,
+                ).animate().fadeIn(duration: 500.ms),
 
-                // Chat Mode Button (blue-green)
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black, width: 1.5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 8,
-                        spreadRadius: 1,
-                        offset: Offset(0, 3),
+                const SizedBox(height: 8),
+                Text(
+                  "Select how you want to interact",
+                  textAlign: TextAlign.center,
+                  style: AppTypography.bodyMedium,
+                ).animate().fadeIn(delay: 200.ms, duration: 500.ms),
+
+                const SizedBox(height: 32),
+
+                // 2x2 Grid of mode cards
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 0.9,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      _ModeCard(
+                        icon: Icons.chat_bubble_rounded,
+                        title: "Chat",
+                        subtitle: "Text conversation",
+                        accentColor: AppColors.auroraTeal,
+                        delay: 300,
+                        onTap: () => Get.to(() => const ChatModeScreen()),
+                      ),
+                      _ModeCard(
+                        icon: Icons.mic_rounded,
+                        title: "Voice",
+                        subtitle: "Audio conversation",
+                        accentColor: AppColors.auroraRose,
+                        delay: 400,
+                        onTap: () => Get.to(() => const AudioConverstaionModeScreen()),
+                      ),
+                      _ModeCard(
+                        icon: Icons.videocam_rounded,
+                        title: "Visual",
+                        subtitle: "Face-to-face AI",
+                        accentColor: AppColors.auroraLavender,
+                        delay: 500,
+                        onTap: () => Get.to(() => const VideoConverstaionModeScreen()),
+                      ),
+                      _ModeCard(
+                        icon: Icons.medical_services_rounded,
+                        title: "Therapist",
+                        subtitle: "Consult a professional",
+                        accentColor: AppColors.auroraGold,
+                        delay: 600,
+                        onTap: () => Get.to(() => const TherapistListPage()),
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        color: Colors.white.withOpacity(
-                            0.6), // 5% white overlay for glass effect
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20,),
-                            CustomButton(
-                              text: "💬 Chat Mode",
-                              onPressed: () =>
-                                  Get.to(() => const ChatModeScreen()),
-                              color: Color(0xBA117774),
-                            ),
-                            const SizedBox(height: 20),
-                            CustomButton(
-                              text: "🎙️ Voice Mode",
-                              onPressed: () =>
-                                  Get.to(() => const AudioConverstaionModeScreen()),
-                              color: Color(0xFFC53367),
-                            ),
-                            const SizedBox(height: 20),
-                            CustomButton(
-                              text: "🤠 Visual Mode",
-                              onPressed: () =>
-                                  Get.to(() => const VideoConverstaionModeScreen()),
-                              color: Color(0xFFB72B1E),
-                            ),
-                            SizedBox(height: 20,),
-                            CustomButton(
-                              text: "🩺 Consult Physical Therapist",
-                              onPressed: () =>
-                                  Get.to(() => const TherapistListPage()),
-                              color: Color(0xFF611D8A),
-                            ),
-                            SizedBox(height: 20,),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
-                const SizedBox(height: 80),
 
-                // History Button (buttonColor theme)
-                GestureDetector(
-                  onTap: () => Get.to(() => ChatHistoryPage()),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 14),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: buttonColor,
-                      border: Border.all(color: Colors.black, width: 3),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.white,
-                          blurRadius: 2,
-                        ),
-                      ],
+                const SizedBox(height: 16),
+
+                // Bottom actions
+                Row(
+                  children: [
+                    Expanded(
+                      child: _BottomActionButton(
+                        icon: Icons.history_rounded,
+                        label: "History",
+                        onTap: () => Get.to(() => ChatHistoryPage()),
+                      ).animate().fadeIn(delay: 700.ms, duration: 500.ms),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.history, color: Colors.white, size: 26),
-                        SizedBox(width: 8),
-                        Text(
-                          "History",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _BottomActionButton(
+                        icon: Icons.bookmark_rounded,
+                        label: "Saved Summaries",
+                        onTap: () => Get.to(() => SavedSummariesScreen()),
+                      ).animate().fadeIn(delay: 800.ms, duration: 500.ms),
                     ),
-                  ),
+                  ],
                 ),
+
                 const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () => Get.to(() => SavedSummariesScreen()),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 14),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: buttonColor,
-                      border: Border.all(color: Colors.black, width: 3),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.white,
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.history, color: Colors.white, size: 26),
-                        SizedBox(width: 8),
-                        Text(
-                          "🗒️ Saved Summaries",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ModeCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color accentColor;
+  final int delay;
+  final VoidCallback onTap;
+
+  const _ModeCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.accentColor,
+    required this.delay,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: GlassDecoration.accentCard(
+              glowColor: accentColor,
+              borderRadius: 22,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: accentColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  child: Icon(icon, color: accentColor, size: 28),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  title,
+                  style: AppTypography.headlineLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: AppTypography.bodySmall,
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    ).animate().fadeIn(delay: Duration(milliseconds: delay), duration: 500.ms)
+        .scale(begin: const Offset(0.9, 0.9), end: const Offset(1, 1));
+  }
+}
+
+class _BottomActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _BottomActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.glassWhite,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.glassBorder, width: 1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: AppColors.auroraLavender, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: AppTypography.labelMedium.copyWith(fontSize: 13),
+            ),
+          ],
         ),
       ),
     );
