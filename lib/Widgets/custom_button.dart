@@ -114,24 +114,3 @@ class _CustomButtonState extends State<CustomButton>
     );
   }
 }
-
-/// AnimatedBuilder is just a shorthand for AnimatedWidget
-class AnimatedBuilder extends AnimatedWidget {
-  final Widget Function(BuildContext context, Widget? child) builder;
-  final Widget? child;
-
-  const AnimatedBuilder({
-    super.key,
-    required super.listenable,
-    required this.builder,
-    this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return builder(context, child);
-  }
-
-  // Expose animation for convenience
-  Animation<double> get animation => listenable as Animation<double>;
-}
