@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.ai_therapy"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     defaultConfig {
         applicationId = "com.example.ai_therapy"
