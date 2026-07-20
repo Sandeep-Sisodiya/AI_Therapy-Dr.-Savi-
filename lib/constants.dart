@@ -1,11 +1,8 @@
 import 'dart:ui';
-import 'app_theme.dart';
 
-// Legacy color aliases — map old names to new design tokens
-// so any file that hasn't been updated yet still compiles.
-const buttonColor = AppColors.auroraLavender;
-const textColor = AppColors.starWhite;
-const sliderGreen = AppColors.auroraLavender;
+const buttonColor = Color(0xFFA9670F);
+const textColor = Color(0xFF0D191E);
+const sliderGreen = Color(0xFF142F4D);
 
 const specificIssues = [
   "Anxiety",
@@ -31,6 +28,5 @@ const specificIssues = [
   "Spirituality",
   "Cultural",
   "Racial",
-  "Priyanshu🤡",
   "OTHER➕",
 ];
